@@ -1,0 +1,3 @@
+{$IFDEF VER170} { Borland Delphi 9.0 }
+  {$DEFINE INLINE_SUPPORTED}
+{$ENDIF}
