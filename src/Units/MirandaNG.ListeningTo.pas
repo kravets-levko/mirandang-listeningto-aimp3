@@ -90,7 +90,9 @@ var
   s: WideString;
   cds: COPYDATASTRUCT;
 begin
+  {$IFDEF DEBUG}
   DebugOutput(FormatTrackInfo(APlayerName, IsPlaying, ATrackInfo, '\0'));
+  {$ENDIF}
   s := WideString(FormatTrackInfo(APlayerName, IsPlaying, ATrackInfo));
   cds.dwData := MIRANDA_DW_PROTECTION;
   cds.lpData := PWideChar(s);

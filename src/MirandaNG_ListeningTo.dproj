@@ -3,7 +3,7 @@
 			<ProjectGuid>{B91586AA-5A13-40C0-AEDD-FD270FF91B9F}</ProjectGuid>
 			<MainSource>MirandaNG_ListeningTo.dpr</MainSource>
 			<Base>True</Base>
-			<Config Condition="'$(Config)'==''">Release</Config>
+			<Config Condition="'$(Config)'==''">Debug</Config>
 			<Platform>Win32</Platform>
 			<AppType>Library</AppType>
 			<FrameworkType>None</FrameworkType>
@@ -91,7 +91,7 @@
 						<VersionInfo Name="MajorVer">1</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">4</VersionInfo>
+						<VersionInfo Name="Build">6</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -103,7 +103,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Open Source</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription">Sends information about current track to MirandaNG ListeningTo plugin</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">1.0.1.4</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">1.0.1.6</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">MirandaNG_ListeningTo.dll</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Levko Kravets</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>

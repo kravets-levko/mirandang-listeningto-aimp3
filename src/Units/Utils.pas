@@ -13,9 +13,7 @@ uses
 
 procedure DebugOutput(const AString: string);
 begin
-  {$IFDEF DEBUG}
   OutputDebugString(PChar(AString));
-  {$ENDIF}
 end;
 
 function GetModuleFileName(hModule: HMODULE): string;
@@ -26,7 +24,9 @@ begin
   Windows.GetModuleFileName(hModule, @buf[0], Length(buf));
   buf[High(buf)] := #0;
   Result := PChar(@buf[0]);
+  {$IFDEF DEBUG}
   DebugOutput('hModule 0x' + IntToHex(hModule, SizeOf(hModule) * 2) + ' ' + Result);
+  {$ENDIF}
 end;
 
 function GetVerInfoValue(const Block: Pointer; const SectionName: string): string; inline;
@@ -35,7 +35,9 @@ var
   cbData: DWORD;
 begin
   Result := '';
+  {$IFDEF DEBUG}
   DebugOutput('VerBlock 0x' + IntToHex(NativeUInt(Block), SizeOf(Block) * 2) + ' ' + SectionName);
+  {$ENDIF}
   if VerQueryValue(Block, PChar(SectionName), pData, cbData) then
   begin
     // For ProductName, FileDescription and LegalCopyright cbData is in characters, not bytes
@@ -119,8 +121,7 @@ begin
   FileDescription := '';
   LegalCopyright := '';
 
-  // ParamStr(0) is compiled into GetModuleFileName with hModule = 0
-  // https://msdn.microsoft.com/en-us/library/windows/desktop/ms683197(v=vs.85).aspx
+  // Get path to this module
   moduleFileName := GetModuleFileName(HInstance);
 
   dwSize := GetFileVersionInfoSize(PChar(moduleFileName), dwHandle);

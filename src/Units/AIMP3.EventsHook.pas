@@ -38,7 +38,9 @@ type
 constructor TPlaybackMessageHook.Create(Core: IAIMPCore);
 begin
   FPlayerName := GetMainModuleVerProductName('AIMP3');
+  {$IFDEF DEBUG}
   DebugOutput('Player Name: ' + FPlayerName);
+  {$ENDIF}
   if Supports(Core, IID_IAIMPServicePlayer, FPlayer) then
     UpdateStatus(FPlayer.GetState <> AIMP_PLAYER_STATE_STOPPED);
 end;
@@ -96,7 +98,7 @@ begin
         begin
           Result.TrackType := TrackType.Radio;
           Result.Length := 0;
-          Result.Title := '';
+          Result.Title := GetString(info, AIMP_FILEINFO_PROPID_TITLE);
           Result.Artist := GetString(info, AIMP_FILEINFO_PROPID_ARTIST);
           Result.Album := '';
           Result.Track := '';
@@ -112,11 +114,15 @@ procedure TPlaybackMessageHook.UpdateStatus(Playing: Boolean);
 begin
   if Playing then
   begin
+    {$IFDEF DEBUG}
     DebugOutput('Playing');
+    {$ENDIF}
     MirandaNG.ListeningTo.SendCurrentTrack(FPlayerName, GetCurrentTrackInfo);
   end else
   begin
+    {$IFDEF DEBUG}
     DebugOutput('Stopped');
+    {$ENDIF}
     MirandaNG.ListeningTo.SendStopped(FPlayerName);
   end;
 end;

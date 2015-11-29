@@ -30,9 +30,11 @@ type
 constructor TAIMPCustomServicePlugin.Create;
 begin
   GetThisModuleVerInfo(FPluginName, FPluginShortDescription, FPluginAuthor);
+  {$IFDEF DEBUG}
   DebugOutput('Plugin.Name: ' + FPluginName);
   DebugOutput('Plugin.ShortDescription: ' + FPluginShortDescription);
   DebugOutput('Plugin.Author: ' + FPluginAuthor);
+  {$ENDIF}
 end;
 
 function TAIMPCustomServicePlugin.InfoGet(Index: Integer): PWideChar;

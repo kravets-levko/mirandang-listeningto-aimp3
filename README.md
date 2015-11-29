@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a plugin for AIMP3 (currently tested with AIMP ver. 3.60) that allows to send information about current track to MirandaNG ListeningTo plugin. **Note!** This plugin does not support other versions of AIMP player (not AIMP2 nor AIMP4) and also it will not work with MirandaIM (MirandaIM is almost dead, so just forget about it).
+This is a plugin for AIMP3 (currently tested with AIMP ver. 3.60) that allows to send information about current track to MirandaNG ListeningTo plugin. **Note!** This plugin does not support other versions of AIMP player (not AIMP2 nor AIMP4) and also may not work with MirandaIM _(I didn't test it since MirandaIM is almost dead. But you can try)_.
 
 Plugin can send information about regular music files and radio stations.
 
@@ -15,5 +15,5 @@ Plugin is created with Embarcadero® Delphi® XE. Precompiled binaries are avail
 ## How to use
 1. Copy `bin/Release/MirandaNG_ListeningTo.dll` into `%AIMP_PATH%\Plugins\MirandaNG_ListeningTo` folder (create folder for plugin if it does not already exist).
 2. Restart AIMP.
-3. Got to AIMP settings and enable plugin `MirandaNG ListeningTo` (if it is already enabled - just skip this step). 
+3. Go to AIMP settings and enable plugin `MirandaNG ListeningTo` (if it is already enabled - just skip this step). 
 4. Enjoy :-)   
