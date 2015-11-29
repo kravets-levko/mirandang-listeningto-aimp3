@@ -5,12 +5,7 @@ interface
 implementation
 
 uses
-  SysUtils, Windows, apiCore, apiPlugin, apiMessages, AIMP3.EventsHook;
-
-const
-  sPluginName = 'Miranda NG ListeningTo Support Plugin';
-  sPluginAuthor = 'Levko Kravets';
-  sPluginShortDescription = 'Allows to send information about current track to Miranda NG ListeningTo plugin.';
+  SysUtils, Windows, Utils, apiCore, apiPlugin, apiMessages, AIMP3.EventsHook;
 
 type
   TAIMPCustomServicePlugin = class(TInterfacedObject, IAIMPPlugin)
@@ -18,20 +13,34 @@ type
     FMessageDispatcher: IAIMPServiceMessageDispatcher;
     FHook: IAIMPMessageHook;
   protected
+    FPluginName: string;
+    FPluginAuthor: string;
+    FPluginShortDescription: string;
+  protected
     { IAIMPPlugin }
     function InfoGet(Index: Integer): PWideChar; stdcall;
     function InfoGetCategories: DWORD; stdcall;
     function Initialize(Core: IAIMPCore): HRESULT; stdcall;
     procedure Finalize; stdcall;
     procedure SystemNotification(NotifyID: Integer; Data: IUnknown); stdcall;
+  public
+    constructor Create;
   end;
+
+constructor TAIMPCustomServicePlugin.Create;
+begin
+  GetThisModuleVerInfo(FPluginName, FPluginShortDescription, FPluginAuthor);
+  DebugOutput('Plugin.Name: ' + FPluginName);
+  DebugOutput('Plugin.ShortDescription: ' + FPluginShortDescription);
+  DebugOutput('Plugin.Author: ' + FPluginAuthor);
+end;
 
 function TAIMPCustomServicePlugin.InfoGet(Index: Integer): PWideChar;
 begin
   case Index of
-  AIMP_PLUGIN_INFO_NAME: Result := sPluginName;
-  AIMP_PLUGIN_INFO_AUTHOR: Result := sPluginAuthor;
-  AIMP_PLUGIN_INFO_SHORT_DESCRIPTION: Result := sPluginShortDescription;
+  AIMP_PLUGIN_INFO_NAME: Result := PWideChar(FPluginName);
+  AIMP_PLUGIN_INFO_AUTHOR: Result := PWideChar(FPluginAuthor);
+  AIMP_PLUGIN_INFO_SHORT_DESCRIPTION: Result := PWideChar(FPluginShortDescription);
   else Result := nil;
   end;
 end;

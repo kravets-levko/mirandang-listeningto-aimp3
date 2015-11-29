@@ -63,7 +63,6 @@
 			<DCCReference Include="Units\AIMP3_SDK\apiPlayer.pas"/>
 			<DCCReference Include="Units\AIMP3_SDK\apiPlaylists.pas"/>
 			<DCCReference Include="Units\Utils.pas"/>
-			<None Include="..\.gitignore"/>
 			<BuildConfiguration Include="Debug">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -88,30 +87,30 @@
 					</Source>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
-						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 						<VersionInfo Name="MajorVer">1</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
-						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Release">1</VersionInfo>
+						<VersionInfo Name="Build">4</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
 						<VersionInfo Name="Private">False</VersionInfo>
 						<VersionInfo Name="DLL">False</VersionInfo>
-						<VersionInfo Name="Locale">1049</VersionInfo>
+						<VersionInfo Name="Locale">1058</VersionInfo>
 						<VersionInfo Name="CodePage">1251</VersionInfo>
 					</VersionInfo>
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Open Source</VersionInfoKeys>
-						<VersionInfoKeys Name="FileDescription">Send information about current track to MirandaNG ListeningTo plugin</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="FileDescription">Sends information about current track to MirandaNG ListeningTo plugin</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">1.0.1.4</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">MirandaNG_ListeningTo.dll</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Levko Kravets</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
 						<VersionInfoKeys Name="OriginalFilename">MirandaNG_ListeningTo.dll</VersionInfoKeys>
 						<VersionInfoKeys Name="ProductName">MirandaNG ListeningTo</VersionInfoKeys>
-						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
-						<VersionInfoKeys Name="Comments">Author: Levko Kravets</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">1.0.1</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments">Author: Levko Kravets. Sources: https://github.com/kravets-levko/mirandang-listeningto-aimp3</VersionInfoKeys>
 					</VersionInfoKeys>
 				</Delphi.Personality>
 				<Platforms>

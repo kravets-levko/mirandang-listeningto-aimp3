@@ -14,7 +14,7 @@ type
 implementation
 
 uses
-  SysUtils, Windows, Messages, Utils, apiObjects, apiPlayer, apiFileManager, MirandaNG.ListeningTo;
+  SysUtils, Windows, Utils, apiObjects, apiPlayer, apiFileManager, MirandaNG.ListeningTo;
 
 const
   AIMP_PLAYER_STATE_STOPPED = 0;
@@ -34,64 +34,6 @@ type
     constructor Create(Core: IAIMPCore); virtual;
     destructor Destroy; override;
   end;
-
-function GetMainModuleVerProductName(DefaultValue: string = ''): string;
-type
-  TTranslationArray = array [Word] of packed record
-    Language: WORD;
-    CodePage: WORD;
-  end;
-  PTranslationArray = ^TTranslationArray;
-var
-  mainModuleFileName: string;
-  dwSize: DWORD;
-  dwHandle: DWORD;
-  buffer: array of Byte;
-  pBlock: Pointer;
-  pTranslations: PTranslationArray;
-  cbTranslations: DWORD;
-  nTranslations: Integer;
-  pData: Pointer;
-  cbData: DWORD;
-  section: string;
-  i: Integer;
-begin
-  Result := DefaultValue;
-
-  // ParamStr(0) is compiled into GetModuleFileName with hModule = 0
-  // https://msdn.microsoft.com/en-us/library/windows/desktop/ms683197(v=vs.85).aspx
-  mainModuleFileName := ParamStr(0);
-
-  dwSize := GetFileVersionInfoSize(PChar(mainModuleFileName), dwHandle);
-  if dwSize = 0 then Exit;
-
-  SetLength(buffer, dwSize);
-  pBlock := @buffer[0];
-  if GetFileVersionInfo(PChar(mainModuleFileName), dwHandle, dwSize, pBlock) then
-  begin
-    // Get all available translations for VersionInfo resource, and then enum them
-    if VerQueryValue(pBlock, '\VarFileInfo\Translation', Pointer(pTranslations), cbTranslations) then
-    begin
-      nTranslations := cbTranslations div SizeOf(DWORD);
-      for i := 0 to nTranslations - 1 do
-      begin
-        section := '\StringFileInfo\' + IntToHex(pTranslations[i].Language, 4) +
-          IntToHex(pTranslations[i].CodePage, 4) + '\ProductName';
-        if VerQueryValue(pBlock, PChar(section), pData, cbData) then
-        begin
-          // For ProductName cbData is in characters, not bytes
-          SetLength(Result, cbData);
-          SetString(Result, PChar(pData), Length(Result));
-          Result := PChar(Result); // Remove trailing zero char
-          if Result <> '' then Break; // Return any value
-        end;
-      end;
-    end;
-  end;
-
-  if Result = '' then
-    Result := DefaultValue;
-end;
 
 constructor TPlaybackMessageHook.Create(Core: IAIMPCore);
 begin
