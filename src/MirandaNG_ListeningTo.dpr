@@ -12,7 +12,8 @@ uses
   apiFileManager in 'Units\AIMP3_SDK\apiFileManager.pas',
   apiObjects in 'Units\AIMP3_SDK\apiObjects.pas',
   apiPlayer in 'Units\AIMP3_SDK\apiPlayer.pas',
-  apiPlaylists in 'Units\AIMP3_SDK\apiPlaylists.pas';
+  apiPlaylists in 'Units\AIMP3_SDK\apiPlaylists.pas',
+  Utils in 'Units\Utils.pas';
 
 begin
 end.

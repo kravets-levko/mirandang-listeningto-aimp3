@@ -24,15 +24,15 @@ procedure SendStopped(const APlayerName: string);
 implementation
 
 uses
-  Windows, Messages, SysUtils;
+  Windows, Messages, SysUtils, Utils;
 
 const
   MIRANDA_WINDOWCLASS = 'Miranda.ListeningTo';
   MIRANDA_DW_PROTECTION = $8754;
 
-function FormatTrackInfo(const APlayerName: string; IsPlaying: Boolean; const ATrackInfo: TTrackInfo): string;
+function FormatTrackInfo(const APlayerName: string; IsPlaying: Boolean; const ATrackInfo: TTrackInfo;
+  const Delimiter: string = #0): string;
 const
-  DELIMITER = #0;
   IS_PLAYING: array [Boolean] of string = ('0', '1');
   TRACK_TYPE: array [Boolean, TrackType] of string = (
     ('', '', ''),
@@ -57,18 +57,18 @@ begin
     else length := '';
 
   Result := ''
-    + IS_PLAYING[IsPlaying] + DELIMITER
-    + APlayerName + DELIMITER
-    + TRACK_TYPE[IsPlaying][info.TrackType] + DELIMITER
-    + info.Title + DELIMITER
-    + info.Artist + DELIMITER
-    + info.Album + DELIMITER
-    + info.Track + DELIMITER
-    + year + DELIMITER
-    + info.Genre + DELIMITER
-    + length + DELIMITER
-    + info.StationName + DELIMITER
-    + DELIMITER; // Ending delimiter
+    + IS_PLAYING[IsPlaying] + Delimiter
+    + APlayerName + Delimiter
+    + TRACK_TYPE[IsPlaying][info.TrackType] + Delimiter
+    + info.Title + Delimiter
+    + info.Artist + Delimiter
+    + info.Album + Delimiter
+    + info.Track + Delimiter
+    + year + Delimiter
+    + info.Genre + Delimiter
+    + length + Delimiter
+    + info.StationName + Delimiter
+    + Delimiter; // Ending Delimiter
 end;
 
 function EnumWindowsProc(wnd: HWND; data: LPARAM): BOOL; stdcall;
@@ -90,6 +90,7 @@ var
   s: WideString;
   cds: COPYDATASTRUCT;
 begin
+  DebugOutput(FormatTrackInfo(APlayerName, IsPlaying, ATrackInfo, '\0'));
   s := WideString(FormatTrackInfo(APlayerName, IsPlaying, ATrackInfo));
   cds.dwData := MIRANDA_DW_PROTECTION;
   cds.lpData := PWideChar(s);

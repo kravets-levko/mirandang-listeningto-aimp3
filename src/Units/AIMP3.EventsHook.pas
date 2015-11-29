@@ -14,7 +14,12 @@ type
 implementation
 
 uses
-  SysUtils, Windows, Messages, apiObjects, apiPlayer, apiFileManager, MirandaNG.ListeningTo;
+  SysUtils, Windows, Messages, Utils, apiObjects, apiPlayer, apiFileManager, MirandaNG.ListeningTo;
+
+const
+  AIMP_PLAYER_STATE_STOPPED = 0;
+  AIMP_PLAYER_STATE_PAUSED  = 1;
+  AIMP_PLAYER_STATE_PLAYING = 2;
 
 type
   TPlaybackMessageHook = class(TInterfacedObject, IAIMPMessageHook)
@@ -30,7 +35,7 @@ type
     destructor Destroy; override;
   end;
 
-function GetProductName(DefaultValue: string = ''): string;
+function GetMainModuleVerProductName(DefaultValue: string = ''): string;
 type
   TTranslationArray = array [Word] of packed record
     Language: WORD;
@@ -38,6 +43,7 @@ type
   end;
   PTranslationArray = ^TTranslationArray;
 var
+  mainModuleFileName: string;
   dwSize: DWORD;
   dwHandle: DWORD;
   buffer: array of Byte;
@@ -52,13 +58,18 @@ var
 begin
   Result := DefaultValue;
 
-  dwSize := GetFileVersionInfoSize(PChar(ParamStr(0)), dwHandle);
+  // ParamStr(0) is compiled into GetModuleFileName with hModule = 0
+  // https://msdn.microsoft.com/en-us/library/windows/desktop/ms683197(v=vs.85).aspx
+  mainModuleFileName := ParamStr(0);
+
+  dwSize := GetFileVersionInfoSize(PChar(mainModuleFileName), dwHandle);
   if dwSize = 0 then Exit;
 
   SetLength(buffer, dwSize);
   pBlock := @buffer[0];
-  if GetFileVersionInfo(PChar(ParamStr(0)), dwHandle, dwSize, pBlock) then
+  if GetFileVersionInfo(PChar(mainModuleFileName), dwHandle, dwSize, pBlock) then
   begin
+    // Get all available translations for VersionInfo resource, and then enum them
     if VerQueryValue(pBlock, '\VarFileInfo\Translation', Pointer(pTranslations), cbTranslations) then
     begin
       nTranslations := cbTranslations div SizeOf(DWORD);
@@ -84,9 +95,10 @@ end;
 
 constructor TPlaybackMessageHook.Create(Core: IAIMPCore);
 begin
+  FPlayerName := GetMainModuleVerProductName('AIMP3');
+  DebugOutput('Player Name: ' + FPlayerName);
   if Supports(Core, IID_IAIMPServicePlayer, FPlayer) then
-    UpdateStatus(FPlayer.GetState <> 0); // 0 - stopped, 1 - paused, 2 - playing
-  FPlayerName := GetProductName('AIMP3');
+    UpdateStatus(FPlayer.GetState <> AIMP_PLAYER_STATE_STOPPED);
 end;
 
 destructor TPlaybackMessageHook.Destroy;
@@ -116,22 +128,40 @@ function TPlaybackMessageHook.GetCurrentTrackInfo: TTrackInfo;
   end;
 
 var
+  src: string;
   info: IAIMPFileInfo;
 begin
+  Finalize(Result);
+  FillChar(Result, SizeOf(Result), 0);
   if Assigned(FPlayer) then
   begin
     if FPlayer.GetInfo(info) = S_OK then
       if Assigned(info) then
       begin
-        Result.TrackType := TrackType.Music;
-        Result.Length := Round(GetDouble(info, AIMP_FILEINFO_PROPID_DURATION));
-        Result.Title := GetString(info, AIMP_FILEINFO_PROPID_TITLE);
-        Result.Artist := GetString(info, AIMP_FILEINFO_PROPID_ARTIST);
-        Result.Album := GetString(info, AIMP_FILEINFO_PROPID_ALBUM);
-        Result.Track := GetString(info, AIMP_FILEINFO_PROPID_TRACKNUMBER);
-        Result.Year := StrToIntDef(GetString(info, AIMP_FILEINFO_PROPID_DATE), 0);
-        Result.Genre := GetString(info, AIMP_FILEINFO_PROPID_GENRE);
-        Result.StationName := '';
+        src := GetString(info, AIMP_FILEINFO_PROPID_FILENAME);
+        if FileExists(src) then
+        begin
+          Result.TrackType := TrackType.Music;
+          Result.Length := Round(GetDouble(info, AIMP_FILEINFO_PROPID_DURATION));
+          Result.Title := GetString(info, AIMP_FILEINFO_PROPID_TITLE);
+          Result.Artist := GetString(info, AIMP_FILEINFO_PROPID_ARTIST);
+          Result.Album := GetString(info, AIMP_FILEINFO_PROPID_ALBUM);
+          Result.Track := GetString(info, AIMP_FILEINFO_PROPID_TRACKNUMBER);
+          Result.Year := StrToIntDef(GetString(info, AIMP_FILEINFO_PROPID_DATE), 0);
+          Result.Genre := GetString(info, AIMP_FILEINFO_PROPID_GENRE);
+          Result.StationName := '';
+        end else
+        begin
+          Result.TrackType := TrackType.Radio;
+          Result.Length := 0;
+          Result.Title := '';
+          Result.Artist := GetString(info, AIMP_FILEINFO_PROPID_ARTIST);
+          Result.Album := '';
+          Result.Track := '';
+          Result.Year := 0;
+          Result.Genre := GetString(info, AIMP_FILEINFO_PROPID_GENRE);
+          Result.StationName := GetString(info, AIMP_FILEINFO_PROPID_TITLE);
+        end;
       end;
   end;
 end;
@@ -140,9 +170,11 @@ procedure TPlaybackMessageHook.UpdateStatus(Playing: Boolean);
 begin
   if Playing then
   begin
-    MirandaNG.ListeningTo.SendTrackInfo(FPlayerName, Playing, GetCurrentTrackInfo);
+    DebugOutput('Playing');
+    MirandaNG.ListeningTo.SendCurrentTrack(FPlayerName, GetCurrentTrackInfo);
   end else
   begin
+    DebugOutput('Stopped');
     MirandaNG.ListeningTo.SendStopped(FPlayerName);
   end;
 end;
