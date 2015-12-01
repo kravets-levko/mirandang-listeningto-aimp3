@@ -26,6 +26,7 @@ type
   protected
     FPlayerName: string;
     FPlayer: IAIMPServicePlayer;
+    FMirandaPlugin: MirandaNG.ListeningTo.TPluginInterface;
     function GetCurrentTrackInfo: TTrackInfo;
     procedure UpdateStatus(Playing: Boolean);
   protected
@@ -41,6 +42,7 @@ begin
   {$IFDEF DEBUG}
   DebugOutput('Player Name: ' + FPlayerName);
   {$ENDIF}
+  FMirandaPlugin := MirandaNG.ListeningTo.TPluginInterface.Create;
   if Supports(Core, IID_IAIMPServicePlayer, FPlayer) then
     UpdateStatus(FPlayer.GetState <> AIMP_PLAYER_STATE_STOPPED);
 end;
@@ -50,6 +52,7 @@ begin
   try
     UpdateStatus(false);
     FPlayer := nil;
+    FreeAndNil(FMirandaPlugin);
   except
   end;
   inherited;
@@ -112,18 +115,18 @@ end;
 
 procedure TPlaybackMessageHook.UpdateStatus(Playing: Boolean);
 begin
-  if Playing then
+  if Playing and Assigned(FMirandaPlugin) then
   begin
     {$IFDEF DEBUG}
     DebugOutput('Playing');
     {$ENDIF}
-    MirandaNG.ListeningTo.SendCurrentTrack(FPlayerName, GetCurrentTrackInfo);
+    FMirandaPlugin.SendPlaying(FPlayerName, GetCurrentTrackInfo);
   end else
   begin
     {$IFDEF DEBUG}
     DebugOutput('Stopped');
     {$ENDIF}
-    MirandaNG.ListeningTo.SendStopped(FPlayerName);
+    FMirandaPlugin.SendStopped(FPlayerName);
   end;
 end;
 

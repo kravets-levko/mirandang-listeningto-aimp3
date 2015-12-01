@@ -2,6 +2,25 @@ unit Utils;
 
 interface
 
+type
+  TrackType = (Music, Video, Radio);
+
+  TTrackInfo = record
+    PlayerName: string;
+    IsPlaying: Boolean;
+
+    TrackType: TrackType;
+    Title: string;
+    Artist: string;
+    Album: string;
+    Track: string;
+    Year: Integer;
+    Genre: string;
+    Length: Int64; // in seconds
+    StationName: string;
+  end;
+
+
 procedure DebugOutput(const AString: string);
 function GetMainModuleVerProductName(DefaultValue: string = ''): string;
 procedure GetThisModuleVerInfo(out ProductName, FileDescription, LegalCopyright: string);

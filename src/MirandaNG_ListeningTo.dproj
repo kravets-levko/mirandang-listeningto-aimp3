@@ -52,9 +52,6 @@
 			<DelphiCompile Include="MirandaNG_ListeningTo.dpr">
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
-			<DCCReference Include="Units\AIMP3.Plugin.pas"/>
-			<DCCReference Include="Units\AIMP3.EventsHook.pas"/>
-			<DCCReference Include="Units\MirandaNG.ListeningTo.pas"/>
 			<DCCReference Include="Units\AIMP3_SDK\apiPlugin.pas"/>
 			<DCCReference Include="Units\AIMP3_SDK\apiCore.pas"/>
 			<DCCReference Include="Units\AIMP3_SDK\apiMessages.pas"/>
@@ -63,6 +60,10 @@
 			<DCCReference Include="Units\AIMP3_SDK\apiPlayer.pas"/>
 			<DCCReference Include="Units\AIMP3_SDK\apiPlaylists.pas"/>
 			<DCCReference Include="Units\Utils.pas"/>
+			<DCCReference Include="Units\MirandaNG\MirandaNG.ListeningTo.pas"/>
+			<DCCReference Include="Units\MirandaNG\MirandaNG.CommunicationThread.pas"/>
+			<DCCReference Include="Units\AIMP3\AIMP3.Plugin.pas"/>
+			<DCCReference Include="Units\AIMP3\AIMP3.EventsHook.pas"/>
 			<BuildConfiguration Include="Debug">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -91,7 +92,7 @@
 						<VersionInfo Name="MajorVer">1</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">6</VersionInfo>
+						<VersionInfo Name="Build">8</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -103,7 +104,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Open Source</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription">Sends information about current track to MirandaNG ListeningTo plugin</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">1.0.1.6</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">1.0.1.8</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">MirandaNG_ListeningTo.dll</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Levko Kravets</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
