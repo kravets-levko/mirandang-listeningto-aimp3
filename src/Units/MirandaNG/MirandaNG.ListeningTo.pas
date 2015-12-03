@@ -3,7 +3,7 @@ unit MirandaNG.ListeningTo;
 interface
 
 uses
-  Utils, MirandaNG.CommunicationThread;
+  App.Utils, MirandaNG.CommunicationThread;
 
 type
   TPluginInterface = class(TObject)
@@ -31,7 +31,7 @@ begin
   if Assigned(FThread) then
   begin
     info := FThread.TrackInfo;
-    info.IsPlaying := false;
+    info.TrackType := TrackType.None;
     FThread.TrackInfo := info;
 
     FThread.WakeUp;
@@ -46,7 +46,6 @@ begin
   if Assigned(FThread) then
   begin
     ATrackInfo.PlayerName := APlayerName;
-    ATrackInfo.IsPlaying := true;
     FThread.TrackInfo := ATrackInfo;
   end;
 end;
@@ -57,8 +56,8 @@ var
 begin
   if Assigned(FThread) then
   begin
+    info := TTrackInfo.Empty;
     info.PlayerName := APlayerName;
-    info.IsPlaying := false;
     FThread.TrackInfo := info;
   end;
 end;

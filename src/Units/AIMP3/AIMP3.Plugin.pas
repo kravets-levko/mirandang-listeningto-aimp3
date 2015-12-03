@@ -2,10 +2,8 @@ unit AIMP3.Plugin;
 
 interface
 
-implementation
-
 uses
-  SysUtils, Windows, Utils, apiCore, apiPlugin, apiMessages, AIMP3.EventsHook;
+  Windows, apiCore, apiPlugin, apiMessages;
 
 type
   TAIMPCustomServicePlugin = class(TInterfacedObject, IAIMPPlugin)
@@ -26,6 +24,11 @@ type
   public
     constructor Create;
   end;
+
+implementation
+
+uses
+  SysUtils, App.Utils, AIMP3.EventsHook;
 
 constructor TAIMPCustomServicePlugin.Create;
 begin
@@ -58,7 +61,7 @@ begin
     Result := S_OK;
     if Supports(Core, IID_IAIMPServiceMessageDispatcher, FMessageDispatcher) then
     begin
-      FHook := AIMP3.EventsHook.Factory.CreatePlayerEventsHook(Core);
+      FHook := TPlaybackMessageHook.Create(Core) as IAIMPMessageHook;
       Result := FMessageDispatcher.Hook(FHook);
     end;
   except
@@ -82,18 +85,5 @@ begin
   except
   end;
 end;
-
-function AIMPPluginGetHeader(out Header: IAIMPPlugin): HRESULT; stdcall;
-begin
-  try
-    Header := TAIMPCustomServicePlugin.Create;
-    Result := S_OK;
-  except
-    Result := E_UNEXPECTED;
-  end;
-end;
-
-exports
-  AIMPPluginGetHeader name 'AIMPPluginGetHeader';
 
 end.

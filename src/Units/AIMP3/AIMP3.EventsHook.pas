@@ -3,23 +3,7 @@ unit AIMP3.EventsHook;
 interface
 
 uses
-  apiCore, apiMessages;
-
-type
-  Factory = class
-  public
-    class function CreatePlayerEventsHook(ACore: IAIMPCore): IAIMPMessageHook;
-  end;
-
-implementation
-
-uses
-  SysUtils, Windows, Utils, apiObjects, apiPlayer, apiFileManager, MirandaNG.ListeningTo;
-
-const
-  AIMP_PLAYER_STATE_STOPPED = 0;
-  AIMP_PLAYER_STATE_PAUSED  = 1;
-  AIMP_PLAYER_STATE_PLAYING = 2;
+  Windows, apiCore, apiMessages, apiPlayer, MirandaNG.ListeningTo, App.Utils;
 
 type
   TPlaybackMessageHook = class(TInterfacedObject, IAIMPMessageHook)
@@ -35,6 +19,16 @@ type
     constructor Create(Core: IAIMPCore); virtual;
     destructor Destroy; override;
   end;
+
+implementation
+
+uses
+  SysUtils, apiObjects, apiFileManager;
+
+const
+  AIMP_PLAYER_STATE_STOPPED = 0;
+  AIMP_PLAYER_STATE_PAUSED  = 1;
+  AIMP_PLAYER_STATE_PLAYING = 2;
 
 constructor TPlaybackMessageHook.Create(Core: IAIMPCore);
 begin
@@ -78,8 +72,7 @@ var
   src: string;
   info: IAIMPFileInfo;
 begin
-  Finalize(Result);
-  FillChar(Result, SizeOf(Result), 0);
+  Result := TTrackInfo.Empty;
   if Assigned(FPlayer) then
   begin
     if FPlayer.GetInfo(info) = S_OK then
@@ -141,13 +134,6 @@ begin
   except
   end;
   Result := E_NOTIMPL;
-end;
-
-{ Factory }
-
-class function Factory.CreatePlayerEventsHook(ACore: IAIMPCore): IAIMPMessageHook;
-begin
-  Result := TPlaybackMessageHook.Create(ACore) as IAIMPMessageHook;
 end;
 
 end.

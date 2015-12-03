@@ -3,7 +3,7 @@ unit MirandaNG.CommunicationThread;
 interface
 
 uses
-  Windows, Classes, SyncObjs, Utils;
+  Windows, Classes, SyncObjs, App.Utils;
 
 type
   TCommunicationThread = class(TThread)
@@ -41,16 +41,13 @@ const
 
 function FormatTrackInfo(const ATrackInfo: TTrackInfo; const Delimiter: string = #0): string;
 const
-  IS_PLAYING: array [Boolean] of string = ('0', '1');
-  TRACK_TYPE: array [Boolean, TrackType] of string = (
-    ('', '', ''),
-    ('Music', 'Video', 'Radio')
-  );
+  IS_PLAYING: array [TrackType] of string = ('0', '1', '1', '1');
+  TRACK_TYPE: array [TrackType] of string = ('', 'Music', 'Video', 'Radio');
 var
   info: TTrackInfo;
   year, length: string;
 begin
-  if ATrackInfo.IsPlaying then
+  if ATrackInfo.TrackType <> TrackType.None then
   begin
     info := ATrackInfo;
   end else
@@ -65,9 +62,9 @@ begin
     else length := '';
 
   Result := ''
-    + IS_PLAYING[ATrackInfo.IsPlaying] + Delimiter
+    + IS_PLAYING[ATrackInfo.TrackType] + Delimiter
     + ATrackInfo.PlayerName + Delimiter
-    + TRACK_TYPE[ATrackInfo.IsPlaying][info.TrackType] + Delimiter
+    + TRACK_TYPE[info.TrackType] + Delimiter
     + info.Title + Delimiter
     + info.Artist + Delimiter
     + info.Album + Delimiter

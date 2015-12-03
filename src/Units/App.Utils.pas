@@ -1,14 +1,13 @@
-unit Utils;
+unit App.Utils;
 
 interface
 
 type
-  TrackType = (Music, Video, Radio);
+  TrackType = (None, Music, Video, Radio);
 
   TTrackInfo = record
     PlayerName: string;
-    IsPlaying: Boolean;
-
+    
     TrackType: TrackType;
     Title: string;
     Artist: string;
@@ -18,6 +17,8 @@ type
     Genre: string;
     Length: Int64; // in seconds
     StationName: string;
+
+    class function Empty: TTrackInfo; static; inline;
   end;
 
 
@@ -171,6 +172,14 @@ begin
       end;
     end;
   end;
+end;
+
+{ TTrackInfo }
+
+class function TTrackInfo.Empty: TTrackInfo;
+begin
+  Finalize(Result);
+  FillChar(Result, SizeOf(Result), 0);
 end;
 
 end.
