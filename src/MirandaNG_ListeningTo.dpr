@@ -10,11 +10,12 @@ uses
   apiObjects in 'Units\AIMP3_SDK\apiObjects.pas',
   apiPlayer in 'Units\AIMP3_SDK\apiPlayer.pas',
   apiPlaylists in 'Units\AIMP3_SDK\apiPlaylists.pas',
-  Utils in 'Units\Utils.pas',
+  App.Utils in 'Units\App.Utils.pas',
   MirandaNG.ListeningTo in 'Units\MirandaNG\MirandaNG.ListeningTo.pas',
   MirandaNG.CommunicationThread in 'Units\MirandaNG\MirandaNG.CommunicationThread.pas',
   AIMP3.Plugin in 'Units\AIMP3\AIMP3.Plugin.pas',
-  AIMP3.EventsHook in 'Units\AIMP3\AIMP3.EventsHook.pas';
+  AIMP3.EventsHook in 'Units\AIMP3\AIMP3.EventsHook.pas',
+  App.ModuleExports in 'Units\App.ModuleExports.pas';
 
 begin
 end.
